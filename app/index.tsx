@@ -4,8 +4,6 @@ import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Home = () => {
-  const theme = useTheme();
-
   return (
     <View style={styles.tilesContainer}>
       <Tile
@@ -48,12 +46,7 @@ const Tile = ({
             size={32}
             color={theme.colors.primary}
           />
-          <Text
-            variant="titleMedium"
-            style={[styles.tileText, { color: theme.colors.onSurface }]}
-          >
-            {label}
-          </Text>
+          <Text variant="titleMedium">{label}</Text>
         </Card.Content>
       </Card>
     </TouchableRipple>
@@ -84,10 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-  },
-  tileText: {
-    textAlign: "center",
-    fontSize: 14,
   },
 });
 

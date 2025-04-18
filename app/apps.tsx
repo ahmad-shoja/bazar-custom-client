@@ -1,19 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Surface, Text } from "react-native-paper";
 
 const Apps = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Apps</Text>
-    </View>
+    <Surface style={styles.container}>
+      <Text variant="headlineMedium">Apps</Text>
+    </Surface>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-  },
   container: {
     flex: 1,
   },
