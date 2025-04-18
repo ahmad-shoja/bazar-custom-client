@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { StyleSheet, View, useColorScheme } from "react-native";
 import { Appbar, PaperProvider, useTheme } from "react-native-paper";
 import "react-native-reanimated";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,11 +32,15 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <AppContent />
-      </ThemeProvider>
-    </PaperProvider>
+    <ToastProvider>
+      <PaperProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <AppContent />
+        </ThemeProvider>
+      </PaperProvider>
+    </ToastProvider>
   );
 }
 
