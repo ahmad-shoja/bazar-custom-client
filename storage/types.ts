@@ -3,3 +3,7 @@ export type Account = {
     phone: string;
     token: string;
 };
+
+export type App = { id: string; name: string; code: string }
+
+
