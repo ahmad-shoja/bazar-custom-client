@@ -1,0 +1,30 @@
+export const properties = {
+    androidClientInfo: {
+        adId: '00000000-0000-0000-0000-000000000000',
+        adOptOut: false,
+        androidId: 'cfca80b58bfabed7',
+        availableSpace: 10708377600,
+        cpu: 'x86_64,x86,arm64-v8a,armeabi-v7a,armeabi',
+        device: '',
+        deviceType: 1,
+        dpi: 280,
+        hardware: '',
+        height: 1080,
+        locale: 'fa',
+        manufacturer: 'samsung',
+        mcc: 310,
+        mnc: 410,
+        mobileServiceType: 'GMS',
+        model: 'SM-G973N',
+        osBuild: '',
+        product: 'SM-G973N',
+        sdkVersion: 25,
+        width: 1920
+    },
+    appThemeState: 0,
+    clientID: '5J6kriVmSr2IDAOdZs5e4Q',
+    clientVersion: '25.3.2',
+    clientVersionCode: 2500302,
+    isKidsEnabled: false,
+    language: 2
+}

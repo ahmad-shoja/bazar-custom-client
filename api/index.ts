@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '../constants/api';
 import { ErrorResponse } from './types';
-
+import { properties } from './constants';
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -9,10 +9,15 @@ const api = axios.create({
     },
 });
 
-export const post = async (url: string, body: any) => {
+export const post = async (url: string, body: any, token?: string) => {
     return new Promise<any>((resolve, reject: (error: ErrorResponse) => void) => {
         api.post(url, {
+            properties,
             "singleRequest": body
+        }, {
+            headers: token ? {
+                'Authorization': `Bearer ${token}`
+            } : {}
         }).then((response) => {
             resolve(response.data);
         }).catch((e) => {
