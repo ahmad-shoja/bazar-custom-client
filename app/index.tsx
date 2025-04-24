@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   mainContainer: {
-    flexDirection: "row",
+    flex: 1,
+    flexDirection: "column",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: 50,

@@ -1,13 +1,12 @@
 import { View } from "react-native";
 
 import { useApps } from "@/hooks/useApps";
-import { router } from "expo-router";
 import { useState } from "react";
 import { App, Code } from "@/storage/types";
-import { useTheme } from "@react-navigation/native";
 import Dropdown from "./Dropdown";
 import { useCodes } from "@/hooks/useCodes";
 import { Button } from "react-native-paper";
+import OutputView, { Line } from "./OutputView";
 
 const Main = () => {
   const { apps } = useApps();
@@ -15,6 +14,15 @@ const Main = () => {
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [selectedAction, setSelectedAction] = useState<string>("");
   const { codes } = useCodes(selectedApp?.id);
+  const [outputLines, setOutputLines] = useState<Line[]>([]);
+
+  const handleReport = () => {
+    setOutputLines([...outputLines, { text: "Report", color: "blue" }]);
+  };
+
+  const handleLike = () => {
+    setOutputLines([...outputLines, { text: "Like", color: "red" }]);
+  };
 
   const appList = [
     { label: "Select an App", value: "" },
@@ -32,14 +40,16 @@ const Main = () => {
     })),
   ];
 
-  const actionList = [
-    { label: "Select an Action", value: "" },
-    { label: "Like", value: "like" },
-    { label: "Report", value: "report" },
-  ];
-
   return (
-    <View style={{ width: "100%", display: "flex" }}>
+    <View
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        flexGrow: 1,
+      }}
+    >
       <View
         style={{
           gap: 16,
@@ -75,13 +85,24 @@ const Main = () => {
           marginTop: 16,
         }}
       >
-        <Button mode="contained" buttonColor="pink" onPress={() => {}}>
+        <Button
+          mode="contained"
+          buttonColor="pink"
+          onPress={handleReport}
+          disabled={!selectedApp || !selectedCode}
+        >
           Report
         </Button>
-        <Button mode="contained" buttonColor={"skyblue"} onPress={() => {}}>
+        <Button
+          mode="contained"
+          buttonColor={"skyblue"}
+          onPress={handleLike}
+          disabled={!selectedApp || !selectedCode}
+        >
           Like
         </Button>
       </View>
+      <OutputView lines={outputLines} clear={() => setOutputLines([])} />
     </View>
   );
 };
