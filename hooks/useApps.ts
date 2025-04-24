@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { addApp as addAppBase, getApps, removeApps as removeAppsBase } from "@/storage/apps";
+import { addApp as addAppBase, getApp, getApps, removeApps as removeAppsBase } from "@/storage/apps";
 import { useEffect } from "react";
 import { App } from "@/storage/types";
 
@@ -24,3 +24,13 @@ export const useApps = () => {
     return { apps, addApp, removeApps };
 
 }
+
+
+export const useApp = (appId: string) => {
+    const [app, setApp] = useState<App | undefined>(undefined);
+    useEffect(() => {
+        getApp(appId).then(setApp)
+    }, [appId])
+
+    return { app }
+} 

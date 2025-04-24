@@ -4,6 +4,8 @@ export type Account = {
     token: string;
 };
 
-export type App = { id: string; name: string; code: string }
+export type App = { name: string; id: string }
+
+export type Code = { id: string; code: string; appId: string; type: 'enemy' | 'mine' }
 
 

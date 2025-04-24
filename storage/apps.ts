@@ -8,6 +8,8 @@ export const getApps = async (): Promise<App[]> => {
     return apps || [];
 };
 
+export const getApp = (appId: string) => getApps().then(apps => apps.find(app => app.id === appId));
+
 export const saveApps = async (apps: App[]): Promise<void> => {
     await saveUserPreferences(APPS_STORAGE_KEY, apps);
 };

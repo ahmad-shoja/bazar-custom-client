@@ -14,12 +14,13 @@ import { useToast } from "@/contexts/ToastContext";
 import { App } from "@/storage/types";
 import { useApps } from "@/hooks/useApps";
 import { useTheme } from "react-native-paper";
+import { router, useNavigation } from "expo-router";
 
 const Apps = () => {
   const [selectedApps, setSelectedApps] = useState<string[]>([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [appId, setAppId] = useState("");
-  const [appCode, setAppCode] = useState("");
+  const [appName, setAppName] = useState("");
   const { showToast } = useToast();
   const { apps, addApp, removeApps } = useApps();
   const theme = useTheme();
@@ -34,21 +35,20 @@ const Apps = () => {
   };
 
   const handleSubmit = () => {
-    if (!appId || !appCode) {
+    if (!appId || !appName) {
       showToast("Please fill in all fields", "error");
       return;
     }
 
     const newApp = {
-      id: Date.now().toString(),
-      name: appId,
-      code: appCode,
+      name: appName,
+      id: appId,
     };
 
     addApp(newApp);
     setIsAddModalVisible(false);
     setAppId("");
-    setAppCode("");
+    setAppName("");
     showToast("App added successfully");
   };
 
@@ -68,15 +68,21 @@ const Apps = () => {
           <List.Item
             key={app.id}
             title={app.name}
-            description={app.code}
+            description={app.id}
             left={(props) => <List.Icon {...props} icon="application" />}
             right={(props) => <List.Icon {...props} icon="delete" />}
-            onPress={() => {
+            onLongPress={() => {
               setSelectedApps((prev) =>
                 prev.includes(app.id)
                   ? prev.filter((id) => id !== app.id)
                   : [...prev, app.id]
               );
+            }}
+            onPress={() => {
+              router.push({
+                pathname: "/codes",
+                params: { appId: app.id },
+              });
             }}
             style={[
               selectedApps.includes(app.id) && styles.selectedItem,
@@ -96,19 +102,22 @@ const Apps = () => {
         <Modal
           visible={isAddModalVisible}
           onDismiss={() => setIsAddModalVisible(false)}
-          contentContainerStyle={styles.modal}
+          contentContainerStyle={[
+            styles.modal,
+            { backgroundColor: theme.colors.background },
+          ]}
         >
           <Text variant="headlineSmall">Add New App</Text>
           <TextInput
-            label="App ID"
-            value={appId}
-            onChangeText={setAppId}
+            label="Name"
+            value={appName}
+            onChangeText={setAppName}
             style={styles.input}
           />
           <TextInput
-            label="App Code"
-            value={appCode}
-            onChangeText={setAppCode}
+            label="Package Name"
+            value={appId}
+            onChangeText={setAppId}
             style={styles.input}
           />
           <View style={styles.modalButtons}>
@@ -117,7 +126,7 @@ const Apps = () => {
               onPress={() => {
                 setIsAddModalVisible(false);
                 setAppId("");
-                setAppCode("");
+                setAppName("");
               }}
             >
               Cancel
