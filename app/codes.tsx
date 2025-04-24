@@ -79,7 +79,11 @@ const Codes = () => {
               );
             }}
             key={code.id}
-            title={code.code}
+            title={
+              <Text style={{ color: code.type === "enemy" ? "red" : "green" }}>
+                {code.code}
+              </Text>
+            }
             left={(props) => <List.Icon {...props} icon="code-braces" />}
             right={(props) => <List.Icon {...props} icon="delete" />}
             style={[
