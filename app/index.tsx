@@ -2,21 +2,25 @@ import { StyleSheet, View } from "react-native";
 import { Card, Text, useTheme, TouchableRipple } from "react-native-paper";
 import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Main from "@/components/main";
 
 const Home = () => {
   return (
-    <View style={styles.tilesContainer}>
-      <Tile
-        icon="account-group"
-        label="Accounts"
-        onPress={() => router.push("/accounts")}
-      />
-      <Tile icon="apps" label="Apps" onPress={() => router.push("/apps")} />
-      <Tile
-        icon="cog"
-        label="Settings"
-        onPress={() => router.push("/settings")}
-      />
+    <View style={styles.mainContainer}>
+      <View style={styles.tilesContainer}>
+        <Tile
+          icon="account-group"
+          label="Accounts"
+          onPress={() => router.push("/accounts")}
+        />
+        <Tile icon="apps" label="Apps" onPress={() => router.push("/apps")} />
+        <Tile
+          icon="cog"
+          label="Settings"
+          onPress={() => router.push("/settings")}
+        />
+      </View>
+      <Main />
     </View>
   );
 };
@@ -58,8 +62,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    width: "100%",
+  },
+  mainContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     marginTop: 50,
     padding: 20,
+    width: "100%",
   },
   tile: {
     width: "30%",
