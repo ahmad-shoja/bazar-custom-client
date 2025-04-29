@@ -1,13 +1,15 @@
+import { LogLine } from "@/types";
 import { useEffect, useRef } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Text, Button } from "react-native-paper";
 
-export type Line = {
-  text: string;
-  color?: string;
-};
-
-const OutputView = ({ lines, clear }: { lines: Line[]; clear: () => void }) => {
+const OutputView = ({
+  lines,
+  clear,
+}: {
+  lines: LogLine[];
+  clear: () => void;
+}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });

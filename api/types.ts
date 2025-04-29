@@ -45,3 +45,25 @@ export type GetOtpResult = {
 }
 
 
+
+
+export type ReviewType = {
+    id: number;
+    user: string;
+    comment: string;
+    likes: number;
+    total: number;
+    rate: number;
+    versionCode: number;
+    date: string;
+    reply: string | null;
+    likedByMe: number;
+    accountID: string;
+    badgeIconURL: string;
+    avatarURL: string;
+    userRepliesCount: number;
+    userRepliesAvatarUrls: string[];
+    fromDeveloper: boolean;
+    reviewAuditState: number;
+    isEdited: boolean;
+}

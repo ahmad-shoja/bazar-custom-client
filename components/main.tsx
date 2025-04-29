@@ -6,22 +6,35 @@ import { App, Code } from "@/storage/types";
 import Dropdown from "./Dropdown";
 import { useCodes } from "@/hooks/useCodes";
 import { Button } from "react-native-paper";
-import OutputView, { Line } from "./OutputView";
+import OutputView from "./OutputView";
+import { like } from "@/services/like";
+import { LogLine } from "@/types";
+import { router } from "expo-router";
+import { useTheme } from "@react-navigation/native";
 
 const Main = () => {
   const { apps } = useApps();
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [selectedAction, setSelectedAction] = useState<string>("");
+  const [isLiking, setIsLiking] = useState(false);
   const { codes } = useCodes(selectedApp?.id);
-  const [outputLines, setOutputLines] = useState<Line[]>([]);
+  const [outputLines, setOutputLines] = useState<LogLine[]>([]);
 
-  const handleReport = () => {
-    setOutputLines([...outputLines, { text: "Report", color: "blue" }]);
-  };
+  const log = (line: LogLine) => setOutputLines([...outputLines, line]);
+  const handleReport = () => {};
 
-  const handleLike = () => {
-    setOutputLines([...outputLines, { text: "Like", color: "red" }]);
+  const handleLike = async () => {
+    if (!selectedApp || !selectedCode) {
+      return log({ text: "Please select both app and code!", color: "red" });
+    }
+
+    setIsLiking(true);
+    try {
+      await like(selectedApp.id, selectedCode?.code, log);
+    } finally {
+      setIsLiking(false);
+    }
   };
 
   const appList = [
@@ -95,9 +108,10 @@ const Main = () => {
         </Button>
         <Button
           mode="contained"
-          buttonColor={"skyblue"}
+          buttonColor="skyblue"
           onPress={handleLike}
-          disabled={!selectedApp || !selectedCode}
+          loading={isLiking}
+          disabled={isLiking || !selectedApp || !selectedCode}
         >
           Like
         </Button>
