@@ -41,7 +41,7 @@ const Codes = () => {
     }
     addCode({
       code,
-      type: isEnemyCode ? "enemy" : "mine",
+      type: isEnemyCode ? "enemy" : "friendly",
       appId: appId as string,
     });
 

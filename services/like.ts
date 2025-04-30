@@ -1,5 +1,7 @@
 import { getReviews } from "@/api/reviews";
 import { LogLine } from "@/types";
+import { executeWithTokensSync } from "./execute";
+import { likeReview } from "@/api/reviews"
 
 export const like = async (appId: string, code: string, logOutput: (log: LogLine) => void) => {
     try {
@@ -11,7 +13,15 @@ export const like = async (appId: string, code: string, logOutput: (log: LogLine
         else
             logOutput({ text: `could not find review from app ${appId} with code ${code} `, color: "red" });
 
-        console.log(ourReviews);
+        for (const { id } of ourReviews) {
+            executeWithTokensSync((token) => likeReview(id, token).then(() => {
+                logOutput({ text: `Successfully liked review ${id}`, color: "green" })
+            }).catch(e => {
+                logOutput({ text: `Failed to like review ${id}: ${e}`, color: "red" })
+            }));
+        }
+
+
 
 
 

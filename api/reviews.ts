@@ -1,5 +1,5 @@
 import { post } from ".";
-import { ReviewResponseType, ReviewType } from "./types";
+import { ReviewResponseType, ReviewType, MarkReviewResponse } from "./types";
 
 
 
@@ -39,10 +39,20 @@ export const getReviews = async ({
 }
 
 
-export const likeReview = async (reviewId: string, token: string) => {
-    return await post("/MarkReviewRequest", {
-        "markReviewRequest": { "isReply": false, "reviewId": reviewId, "type": "L" }
-    }, token)
+export const likeReview = async (reviewId: number, token: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+        post<MarkReviewResponse>("/MarkReviewRequest", {
+            "markReviewRequest": { "isReply": false, "reviewId": reviewId, "type": "L" }
+        }, token).then((response) => {
+            if (response.singleReply.markReviewReply.result) {
+                resolve();
+            } else {
+                reject(response.properties.errorMessage);
+            }
+        }).catch((error) => {
+            reject(error.status);
+        });
+    });
 }
 
 export const dislikeReview = async (reviewId: string, token: string) => {

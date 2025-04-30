@@ -6,6 +6,8 @@ export type Account = {
 
 export type App = { name: string; id: string }
 
-export type Code = { id: string; code: string; appId: string; type: 'enemy' | 'mine' }
+export type CodeType = "friendly" | "enemy"
+
+export type Code = { id: string; code: string; appId: string; type: CodeType }
 
 

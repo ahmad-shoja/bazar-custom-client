@@ -86,3 +86,15 @@ export type ReviewType = {
     reviewAuditState: number;
     isEdited: boolean;
 }
+
+export type MarkReviewResponse = {
+    properties: {
+        statusCode: number;
+        errorMessage: string;
+    };
+    singleReply: {
+        markReviewReply: {
+            result: boolean;
+        }
+    }
+}

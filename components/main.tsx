@@ -17,12 +17,11 @@ const Main = () => {
   const { apps } = useApps();
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
-  const [selectedAction, setSelectedAction] = useState<string>("");
   const [isLiking, setIsLiking] = useState(false);
   const { codes } = useCodes(selectedApp?.id);
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
 
-  const log = (line: LogLine) => setOutputLines([...outputLines, line]);
+  const log = (line: LogLine) => setOutputLines((p) => [...p, line]);
   const handleReport = () => {};
 
   const handleLike = async () => {
