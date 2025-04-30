@@ -61,6 +61,7 @@ const Main = () => {
     ...codes.map((code: Code) => ({
       label: `${code.code}`,
       value: code.id,
+      color: code.type === "enemy" ? "red" : "green",
     })),
   ];
 
