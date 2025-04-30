@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { addApp as addAppBase, getApp, getApps, removeApps as removeAppsBase } from "@/storage/apps";
+import { addApp as addAppBase, getApp, getApps, removeApps as removeAppsBase } from "@/services/storage/apps";
 import { useEffect } from "react";
-import { App } from "@/storage/types";
+import { App } from "@/services/storage/types";
 
 export const useApps = () => {
     const [apps, setApps] = useState<App[]>([]);

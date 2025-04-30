@@ -11,7 +11,7 @@ import {
 } from "react-native-paper";
 import { useState } from "react";
 import { useToast } from "@/contexts/ToastContext";
-import { App } from "@/storage/types";
+import { App } from "@/services/storage/types";
 import { useApps } from "@/hooks/useApps";
 import { useTheme } from "react-native-paper";
 import { router, useNavigation } from "expo-router";

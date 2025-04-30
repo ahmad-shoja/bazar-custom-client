@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { Code } from "@/storage/types";
-import { getCodes, addCode as addCodeBase, removeCodes as removeCodesBase } from "@/storage/codes";
+import { Code } from "@/services/storage/types";
+import { getCodes, addCode as addCodeBase, removeCodes as removeCodesBase } from "@/services/storage/codes";
 
 export const useCodes = (appId?: string) => {
     const [codes, setCodes] = useState<Code[]>([]);

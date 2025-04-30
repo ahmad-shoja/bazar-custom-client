@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { addAccount as addAccountBase, getAccounts, removeAccounts as removeAccountsBase } from "@/storage/accounts";
+import { addAccount as addAccountBase, getAccounts, removeAccounts as removeAccountsBase } from "@/services/storage/accounts";
 import { useEffect } from "react";
-import { Account } from "@/storage/types";
+import { Account } from "@/services/storage/types";
 
 export const useAccounts = () => {
     const [accounts, setAccounts] = useState<Account[]>([]);

@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { useApps } from "@/hooks/useApps";
 import { useState } from "react";
-import { App, Code } from "@/storage/types";
+import { App, Code } from "@/services/storage/types";
 import Dropdown from "./Dropdown";
 import { useCodes } from "@/hooks/useCodes";
 import { Button } from "react-native-paper";
@@ -53,15 +53,6 @@ const Main = () => {
       value: code.id,
     })),
   ];
-
-  const handleTest = async () => {
-    const reviewRepo = await getReviewRepository();
-    setOutputLines((ol) => [
-      ...ol,
-      { text: reviewRepo.findById(0), color: "yellow" },
-      { text: reviewRepo.findById(1), color: "yellow" },
-    ]);
-  };
 
   return (
     <View
@@ -124,15 +115,6 @@ const Main = () => {
           disabled={isLiking || !selectedApp || !selectedCode}
         >
           Like
-        </Button>
-        <Button
-          mode="contained"
-          buttonColor="skyblue"
-          onPress={handleTest}
-          loading={isLiking}
-          disabled={isLiking || !selectedApp || !selectedCode}
-        >
-          Test
         </Button>
       </View>
       <OutputView lines={outputLines} clear={() => setOutputLines([])} />
