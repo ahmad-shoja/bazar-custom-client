@@ -7,7 +7,7 @@ import Dropdown from "./Dropdown";
 import { useCodes } from "@/hooks/useCodes";
 import { Button } from "react-native-paper";
 import OutputView from "./OutputView";
-import { like } from "@/services/like";
+import { dislike, like } from "@/services/like";
 import { LogLine } from "@/types";
 import { router } from "expo-router";
 import { useTheme } from "@react-navigation/native";
@@ -32,6 +32,17 @@ const Main = () => {
     setIsLiking(true);
     try {
       await like(selectedApp.id, selectedCode?.code, log);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+  const handleDislike = async () => {
+    if (!selectedApp || !selectedCode) {
+      return log({ text: "Please select both app and code!", color: "red" });
+    }
+    setIsLiking(true);
+    try {
+      await dislike(selectedApp.id, selectedCode?.code, log);
     } finally {
       setIsLiking(false);
     }
@@ -100,9 +111,11 @@ const Main = () => {
       >
         <Button
           mode="contained"
-          buttonColor="pink"
+          buttonColor="orange"
           onPress={handleReport}
-          disabled={!selectedApp || !selectedCode}
+          disabled={
+            !selectedApp || !selectedCode || selectedCode?.type === "friendly"
+          }
         >
           Report
         </Button>
@@ -111,9 +124,28 @@ const Main = () => {
           buttonColor="skyblue"
           onPress={handleLike}
           loading={isLiking}
-          disabled={isLiking || !selectedApp || !selectedCode}
+          disabled={
+            isLiking ||
+            !selectedApp ||
+            !selectedCode ||
+            selectedCode?.type === "enemy"
+          }
         >
           Like
+        </Button>
+        <Button
+          mode="contained"
+          buttonColor="pink"
+          onPress={handleDislike}
+          loading={isLiking}
+          disabled={
+            isLiking ||
+            !selectedApp ||
+            !selectedCode ||
+            selectedCode?.type === "friendly"
+          }
+        >
+          Dislike
         </Button>
       </View>
       <OutputView lines={outputLines} clear={() => setOutputLines([])} />

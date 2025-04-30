@@ -55,13 +55,13 @@ export const likeReview = async (reviewId: number, token: string): Promise<void>
     });
 }
 
-export const dislikeReview = async (reviewId: string, token: string) => {
+export const dislikeReview = async (reviewId: number, token: string) => {
     return await post("/MarkReviewRequest", {
         "markReviewRequest": { "isReply": false, "reviewId": reviewId, "type": "D" }
     }, token)
 }
 
-export const reportReview = async (reviewId: string, token: string) => {
+export const reportReview = async (reviewId: number, token: string) => {
     return await post("/ReportSpamReviewRequest", {
         "reportReviewRequest": { "reviewId": reviewId }
     }, token)
