@@ -14,11 +14,11 @@ export const like = async (appId: string, code: string, logOutput: (log: LogLine
             logOutput({ text: `could not find review from app ${appId} with code ${code} `, color: "red" });
 
         for (const { id } of ourReviews) {
-            executeWithTokensSync((token) => likeReview(id, token).then(() => {
+            executeWithTokensSync(async (token) => likeReview(id, token).then(() => {
                 logOutput({ text: `Successfully liked review ${id}`, color: "green" })
             }).catch(e => {
                 logOutput({ text: `Failed to like review ${id}: ${e}`, color: "red" })
-            }));
+            }), logOutput);
         }
 
 

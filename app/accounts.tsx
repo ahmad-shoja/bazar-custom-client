@@ -49,7 +49,6 @@ const Accounts = () => {
     } else {
       verifyOtp(phoneNumber, otpCode)
         .then((res) => {
-          console.log(JSON.stringify(res));
           const newAccount = {
             id: phoneNumber,
             phone: phoneNumber,
