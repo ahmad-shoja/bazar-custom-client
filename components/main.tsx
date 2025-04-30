@@ -12,6 +12,7 @@ import { LogLine } from "@/types";
 import { router } from "expo-router";
 import { useTheme } from "@react-navigation/native";
 import { getReviewRepository } from "@/api/repository/reviews";
+import { report } from "@/services/report";
 
 const Main = () => {
   const { apps } = useApps();
@@ -22,7 +23,18 @@ const Main = () => {
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
 
   const log = (line: LogLine) => setOutputLines((p) => [...p, line]);
-  const handleReport = () => {};
+  const handleReport = async () => {
+    if (!selectedApp || !selectedCode) {
+      return log({ text: "Please select both app and code!", color: "red" });
+    }
+
+    setIsLiking(true);
+    try {
+      await report(selectedApp.id, selectedCode?.code, log);
+    } finally {
+      setIsLiking(false);
+    }
+  };
 
   const handleLike = async () => {
     if (!selectedApp || !selectedCode) {

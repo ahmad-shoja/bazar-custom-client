@@ -63,7 +63,7 @@ export const dislikeReview = async (reviewId: number, token: string) => {
 
 export const reportReview = async (reviewId: number, token: string) => {
     return await post("/ReportSpamReviewRequest", {
-        "reportReviewRequest": { "reviewId": reviewId }
+        "reportSpamReviewRequest": { "isReply": false, "reviewId": reviewId }
     }, token)
 }
 

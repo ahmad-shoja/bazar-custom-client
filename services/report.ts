@@ -16,7 +16,7 @@ export const report = async (appId: string, code: string, logOutput: (log: LogLi
             executeWithTokensSync(async (token) => reportReview(id, token).then(() => {
                 logOutput({ text: `Successfully reported review ${id}`, color: "green" })
             }).catch(e => {
-                logOutput({ text: `Failed to reported review ${id}: ${e}`, color: "red" })
+                logOutput({ text: `Failed to reported review ${id}: ${JSON.stringify(e)}`, color: "red" })
             }), logOutput);
         }
 
