@@ -3,14 +3,17 @@ import { LogLine } from "@/types";
 
 export const like = async (appId: string, code: string, logOutput: (log: LogLine) => void) => {
     try {
-        const reviews = await getReviews(appId);
+        const reviews = await getReviews({ appId, maxDep: 12 });
         logOutput({ text: `fetched ${reviews?.length} review successfully`, color: "green" });
-        const theReview = reviews.find(review => review.comment.includes(code));
-        if (theReview)
-            logOutput({ text: `found review by ${theReview.user}`, color: "green" });
+        const ourReviews = reviews.filter(review => review.comment.includes(code));
+        if (ourReviews.length > 0)
+            logOutput({ text: `found review by: \n ${ourReviews.map(({ user }) => user).join('\n')}`, color: "green" });
         else
             logOutput({ text: `could not find review from app ${appId} with code ${code} `, color: "red" });
-        console.log({ reviews });
+
+        console.log(ourReviews);
+
+
 
     } catch (e: any) {
         logOutput(e?.message ?? JSON.stringify(e));

@@ -47,6 +47,25 @@ export type GetOtpResult = {
 
 
 
+export type ReviewResponseType = {
+    properties: {
+        statusCode: number;
+        errorMessage: string;
+    };
+    singleReply: {
+        reviewReply: {
+            reviews: ReviewType[];
+            nextPageCursor: string;
+            sortByOptions: {
+                title: string;
+                type: number;
+            }[];
+        };
+    };
+};
+
+
+
 export type ReviewType = {
     id: number;
     user: string;

@@ -11,6 +11,7 @@ import { like } from "@/services/like";
 import { LogLine } from "@/types";
 import { router } from "expo-router";
 import { useTheme } from "@react-navigation/native";
+import { getReviewRepository } from "@/api/repository/reviews";
 
 const Main = () => {
   const { apps } = useApps();
@@ -52,6 +53,15 @@ const Main = () => {
       value: code.id,
     })),
   ];
+
+  const handleTest = async () => {
+    const reviewRepo = await getReviewRepository();
+    setOutputLines((ol) => [
+      ...ol,
+      { text: reviewRepo.findById(0), color: "yellow" },
+      { text: reviewRepo.findById(1), color: "yellow" },
+    ]);
+  };
 
   return (
     <View
@@ -114,6 +124,15 @@ const Main = () => {
           disabled={isLiking || !selectedApp || !selectedCode}
         >
           Like
+        </Button>
+        <Button
+          mode="contained"
+          buttonColor="skyblue"
+          onPress={handleTest}
+          loading={isLiking}
+          disabled={isLiking || !selectedApp || !selectedCode}
+        >
+          Test
         </Button>
       </View>
       <OutputView lines={outputLines} clear={() => setOutputLines([])} />

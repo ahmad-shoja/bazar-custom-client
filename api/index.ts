@@ -9,8 +9,8 @@ const api = axios.create({
     },
 });
 
-export const post = async (url: string, body: any, token?: string) => {
-    return new Promise<any>((resolve, reject: (error: ErrorResponse) => void) => {
+export const post = async <T = any>(url: string, body: any, token?: string): Promise<T> => {
+    return new Promise<T>((resolve, reject: (error: ErrorResponse) => void) => {
         api.post(url, {
             properties,
             "singleRequest": body
