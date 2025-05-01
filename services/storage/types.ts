@@ -2,6 +2,7 @@ export type Account = {
     id: string;
     phone: string;
     token: string;
+    refreshToken: string
 };
 
 export type App = { name: string; id: string }

@@ -53,13 +53,14 @@ const Accounts = () => {
             id: phoneNumber,
             phone: phoneNumber,
             token: res.token,
+            refreshToken: res.refreshToken,
           };
           addAccount(newAccount);
           setIsAddModalVisible(false);
           setIsOtpPhase(false);
           setPhoneNumber("");
           setOtpCode("");
-          showToast("Account added successfully");
+          showToast("Account added successfully", "success");
         })
         .catch((e) => {
           showToast(e, "error");

@@ -1,5 +1,5 @@
 import { post } from ".";
-import { GetOtpResponse, GetOtpResult, VerifyOtpResponse, VerifyOtpResult } from "./types";
+import { GetAccessTokenResponse, GetAccessTokenResult, GetOtpResponse, GetOtpResult, VerifyOtpResponse, VerifyOtpResult } from "./types";
 
 export const reqOtp = async (phone: string): Promise<GetOtpResult> => {
     return new Promise(async (resolve, reject) => {
@@ -38,6 +38,22 @@ export const verifyOtp = async (phone: string, otp: string): Promise<VerifyOtpRe
     });
 };
 
+
+
+
+export const getAccessToken = async (refreshToken: string): Promise<GetAccessTokenResult> => {
+    return new Promise(async (resolve, reject) => {
+        post('/getAccessTokenRequest',
+            { getAccessTokenRequest: { refreshToken } }
+        ).then((response: any) => {
+            const typedResponse = response as GetAccessTokenResponse;
+            const { accessToken } = typedResponse.singleReply.getAccessTokenReply;
+            resolve({ token: accessToken });
+        }).catch(({ message, status }) => {
+            reject(`${status}: ${message}`);
+        });
+    });
+};
 
 
 

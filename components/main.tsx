@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
 import { useApps } from "@/hooks/useApps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { App, Code } from "@/services/storage/types";
 import Dropdown from "./Dropdown";
 import { useCodes } from "@/hooks/useCodes";
@@ -13,6 +13,7 @@ import { router } from "expo-router";
 import { useTheme } from "@react-navigation/native";
 import { getReviewRepository } from "@/api/repository/reviews";
 import { report } from "@/services/report";
+import { useAccounts } from "@/hooks/useAccounts";
 
 const Main = () => {
   const { apps } = useApps();
@@ -21,8 +22,23 @@ const Main = () => {
   const [isLiking, setIsLiking] = useState(false);
   const { codes } = useCodes(selectedApp?.id);
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
-
+  const { refreshTokens } = useAccounts();
   const log = (line: LogLine) => setOutputLines((p) => [...p, line]);
+
+  useEffect(() => {
+    log({ text: "Refreshing account tokens...", color: "yellow" });
+    refreshTokens()
+      .then(() =>
+        log({ text: "Successfully refreshed account tokens", color: "green" })
+      )
+      .catch((error) =>
+        log({
+          text: "Failed to refresh account tokens: " + error,
+          color: "red",
+        })
+      );
+  }, []);
+
   const handleReport = async () => {
     if (!selectedApp || !selectedCode) {
       return log({ text: "Please select both app and code!", color: "red" });

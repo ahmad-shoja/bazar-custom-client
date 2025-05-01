@@ -18,6 +18,18 @@ export type VerifyOtpResponse = {
     }
 }
 
+export type GetAccessTokenResponse = {
+    properties: {
+        statusCode: number;
+        errorMessage: string;
+    };
+    singleReply: {
+        getAccessTokenReply: {
+            accessToken: string;
+        }
+    }
+
+}
 
 export type GetOtpResponse = {
     properties: {
@@ -37,6 +49,9 @@ export type VerifyOtpResult = {
     token: string;
     refreshToken: string;
     waitingSeconds: number;
+}
+export type GetAccessTokenResult = {
+    token: string;
 }
 
 export type GetOtpResult = {
