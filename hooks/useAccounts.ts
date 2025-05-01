@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { addAccount as addAccountBase, getAccounts, removeAccounts, removeAccounts as removeAccountsBase } from "@/services/storage/accounts";
+import { addAccount as addAccountBase, getAccounts, removeAccounts, removeAccounts as removeAccountsBase, saveAccounts } from "@/services/storage/accounts";
 import { useEffect } from "react";
 import { Account } from "@/services/storage/types";
 import { getAccessToken } from "@/api/auth";
@@ -26,7 +26,7 @@ export const useAccounts = () => {
         return new Promise(async (resolve, reject) => {
             try {
                 const refreshedAccounts: Account[] = []
-                for (const account of accounts) {
+                for (const account of await getAccounts()) {
                     try {
                         const { token } = await getAccessToken(account.refreshToken)
                         refreshedAccounts.push({ ...account, token })
@@ -35,6 +35,9 @@ export const useAccounts = () => {
                         throw error;
                     }
                 }
+                console.log(refreshedAccounts);
+
+                saveAccounts(refreshedAccounts);
                 resolve();
             } catch (error) {
                 reject(error);

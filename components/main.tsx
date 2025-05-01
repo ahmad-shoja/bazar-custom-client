@@ -14,6 +14,7 @@ import { useTheme } from "@react-navigation/native";
 import { getReviewRepository } from "@/api/repository/reviews";
 import { report } from "@/services/report";
 import { useAccounts } from "@/hooks/useAccounts";
+import { getAccounts } from "@/services/storage/accounts";
 
 const Main = () => {
   const { apps, refresh: refreshApps } = useApps();
@@ -34,10 +35,16 @@ const Main = () => {
 
   useEffect(() => {
     log({ text: "Refreshing account tokens...", color: "yellow" });
+    getAccounts().then((accounts) =>
+      accounts.forEach(({ token, phone }) => log({ text: phone + token }))
+    );
     refreshTokens()
-      .then(() =>
-        log({ text: "Successfully refreshed account tokens", color: "green" })
-      )
+      .then(() => {
+        log({ text: "Successfully refreshed account tokens", color: "green" });
+        getAccounts().then((accounts) =>
+          accounts.forEach(({ token, phone }) => log({ text: phone + token }))
+        );
+      })
       .catch((error) =>
         log({
           text: "Failed to refresh account tokens: " + error,
