@@ -80,9 +80,9 @@ function AppContent() {
           }}
         />
         <Stack.Screen
-          name="settings"
+          name="operations"
           options={{
-            title: "Settings",
+            title: "Operations",
           }}
         />
         <Stack.Screen

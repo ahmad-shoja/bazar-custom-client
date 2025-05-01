@@ -15,9 +15,9 @@ const Home = () => {
         />
         <Tile icon="apps" label="Apps" onPress={() => router.push("/apps")} />
         <Tile
-          icon="cog"
-          label="Settings"
-          onPress={() => router.push("/settings")}
+          icon="refresh-circle"
+          label="Ops"
+          onPress={() => router.push("/Operations")}
         />
       </View>
       <Main />
