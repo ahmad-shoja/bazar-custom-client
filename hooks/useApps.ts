@@ -7,8 +7,12 @@ import { App } from "@/services/storage/types";
 export const useApps = () => {
     const [apps, setApps] = useState<App[]>([]);
 
-    useEffect(() => {
+    const refresh = () => {
         getApps().then(setApps);
+    };
+
+    useEffect(() => {
+        refresh();
     }, []);
 
     const addApp = (app: App) => {
@@ -21,10 +25,8 @@ export const useApps = () => {
         setApps(apps.filter(app => !appIds.includes(app.id)));
     }
 
-    return { apps, addApp, removeApps };
-
+    return { apps, addApp, removeApps, refresh };
 }
-
 
 export const useApp = (appId: string) => {
     const [app, setApp] = useState<App | undefined>(undefined);

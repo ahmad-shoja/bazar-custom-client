@@ -6,10 +6,14 @@ import { getCodes, addCode as addCodeBase, removeCodes as removeCodesBase } from
 export const useCodes = (appId?: string) => {
     const [codes, setCodes] = useState<Code[]>([]);
 
-    useEffect(() => {
+    const refresh = () => {
         if (appId) {
             getCodes().then(codes => setCodes(codes.filter(code => code.appId === appId)));
         }
+    };
+
+    useEffect(() => {
+        refresh();
     }, [appId]);
 
     const addCode = async (code: Omit<Code, "id">) => {
@@ -22,5 +26,5 @@ export const useCodes = (appId?: string) => {
         setCodes(codes.filter(code => !codeIds.includes(code.id)));
     }
 
-    return { codes, addCode, removeCodes };
+    return { codes, addCode, removeCodes, refresh };
 }

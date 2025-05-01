@@ -9,21 +9,28 @@ import { Button } from "react-native-paper";
 import OutputView from "./OutputView";
 import { dislike, like } from "@/services/like";
 import { LogLine } from "@/types";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useTheme } from "@react-navigation/native";
 import { getReviewRepository } from "@/api/repository/reviews";
 import { report } from "@/services/report";
 import { useAccounts } from "@/hooks/useAccounts";
 
 const Main = () => {
-  const { apps } = useApps();
+  const { apps, refresh: refreshApps } = useApps();
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [isLiking, setIsLiking] = useState(false);
-  const { codes } = useCodes(selectedApp?.id);
+  const { codes, refresh: refreshCodes } = useCodes(selectedApp?.id);
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
   const { refreshTokens } = useAccounts();
   const log = (line: LogLine) => setOutputLines((p) => [...p, line]);
+
+  useFocusEffect(() => {
+    refreshApps();
+    if (selectedApp?.id) {
+      refreshCodes();
+    }
+  });
 
   useEffect(() => {
     log({ text: "Refreshing account tokens...", color: "yellow" });
