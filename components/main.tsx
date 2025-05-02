@@ -21,6 +21,8 @@ const Main = () => {
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
   const [isLiking, setIsLiking] = useState(false);
+  const [isDisliking, setIsDisliking] = useState(false);
+  const [isReporting, setIsReporting] = useState(false);
   const { codes, refresh: refreshCodes } = useCodes(selectedApp?.id);
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
   const { refreshTokens } = useAccounts();
@@ -58,11 +60,11 @@ const Main = () => {
       return log({ text: "Please select both app and code!", color: "red" });
     }
 
-    setIsLiking(true);
+    setIsReporting(true);
     try {
       await report(selectedApp.id, selectedCode?.code, log);
     } finally {
-      setIsLiking(false);
+      setIsReporting(false);
     }
   };
 
@@ -82,11 +84,11 @@ const Main = () => {
     if (!selectedApp || !selectedCode) {
       return log({ text: "Please select both app and code!", color: "red" });
     }
-    setIsLiking(true);
+    setIsDisliking(true);
     try {
       await dislike(selectedApp.id, selectedCode?.code, log);
     } finally {
-      setIsLiking(false);
+      setIsDisliking(false);
     }
   };
 
@@ -156,6 +158,7 @@ const Main = () => {
           mode="contained"
           buttonColor="orange"
           onPress={handleReport}
+          loading={isReporting}
           disabled={
             !selectedApp || !selectedCode || selectedCode?.type === "friendly"
           }
@@ -180,7 +183,7 @@ const Main = () => {
           mode="contained"
           buttonColor="pink"
           onPress={handleDislike}
-          loading={isLiking}
+          loading={isDisliking}
           disabled={
             isLiking ||
             !selectedApp ||
