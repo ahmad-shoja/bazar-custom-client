@@ -14,11 +14,7 @@ export const like = async (appId: string, code: string, logOutput: (log: LogLine
             logOutput({ text: `could not find review from app ${appId} with code ${code} `, color: "red" });
 
         for (const { id } of ourReviews) {
-            executeWithTokensSync(async (token) => likeReview(id, token).then(() => {
-                logOutput({ text: `Successfully liked review ${id}`, color: "green" })
-            }).catch(e => {
-                logOutput({ text: `Failed to like review ${id}: ${e}`, color: "red" })
-            }), logOutput);
+            executeWithTokensSync(async (token) => likeReview(id, token), logOutput);
         }
 
 
@@ -40,11 +36,7 @@ export const dislike = async (appId: string, code: string, logOutput: (log: LogL
             logOutput({ text: `could not find review from app ${appId} with code ${code} `, color: "red" });
 
         for (const { id } of ourReviews) {
-            executeWithTokensSync(async (token) => dislikeReview(id, token).then(() => {
-                logOutput({ text: `Successfully disliked review ${id}`, color: "green" })
-            }).catch(e => {
-                logOutput({ text: `Failed to dislike review ${id}: ${e}`, color: "red" })
-            }), logOutput);
+            executeWithTokensSync(async (token) => dislikeReview(id, token), logOutput);
         }
 
     } catch (e: any) {

@@ -34,3 +34,13 @@ export const removeAccounts = async (accountIds: string[]): Promise<void> => {
     }
 };
 
+export const updateAccount = async (account: Account) => {
+    try {
+        await removeAccounts([account.id]);
+        await addAccount(account);
+    } catch (error) {
+        console.error('Error update account :', error);
+        throw error;
+    }
+}
+

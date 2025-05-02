@@ -44,10 +44,31 @@ export const likeReview = async (reviewId: number, token: string): Promise<void>
         post<MarkReviewResponse>("/MarkReviewRequest", {
             "markReviewRequest": { "isReply": false, "reviewId": reviewId, "type": "L" }
         }, token).then((response) => {
+            console.log("999", { response });
+
             if (response.singleReply.markReviewReply.result) {
                 resolve();
             } else {
-                reject(response.properties.errorMessage);
+                reject(response.properties.statusCode);
+            }
+        }).catch((error) => {
+            console.log("999", { error });
+
+            reject(error.status);
+        });
+    });
+}
+
+
+export const dislikeReview = async (reviewId: number, token: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+        post<MarkReviewResponse>("/MarkReviewRequest", {
+            markReviewRequest: { isReply: false, reviewId, type: "D" }
+        }, token).then((response) => {
+            if (response.singleReply.markReviewReply.result) {
+                resolve();
+            } else {
+                reject(response.properties.statusCode);
             }
         }).catch((error) => {
             reject(error.status);
@@ -55,16 +76,19 @@ export const likeReview = async (reviewId: number, token: string): Promise<void>
     });
 }
 
-export const dislikeReview = async (reviewId: number, token: string) => {
-    return await post("/MarkReviewRequest", {
-        "markReviewRequest": { "isReply": false, "reviewId": reviewId, "type": "D" }
-    }, token)
+export const reportReview = async (reviewId: number, token: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+        post("/ReportSpamReviewRequest", {
+            reportSpamReviewRequest: { isReply: false, reviewId }
+        }, token).then((response) => {
+            if (response.singleReply.reportSpamReviewReply.result) {
+                resolve();
+            } else {
+                reject(response.properties.statusCode);
+            }
+        }).catch((error) => {
+            reject(error.status);
+        });
+    });
 }
-
-export const reportReview = async (reviewId: number, token: string) => {
-    return await post("/ReportSpamReviewRequest", {
-        "reportSpamReviewRequest": { "isReply": false, "reviewId": reviewId }
-    }, token)
-}
-
 

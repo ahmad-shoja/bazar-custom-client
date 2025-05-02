@@ -29,7 +29,7 @@ export const useAccounts = () => {
                 for (const account of await getAccounts()) {
                     try {
                         const { token } = await getAccessToken(account.refreshToken)
-                        refreshedAccounts.push({ ...account, token })
+                        refreshedAccounts.push({ ...account, token: token + "l" })
                     } catch (error) {
                         console.error('Error refreshing token:', error);
                         throw error;

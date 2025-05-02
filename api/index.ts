@@ -21,7 +21,6 @@ export const post = async <T = any>(url: string, body: any, token?: string): Pro
         }).then((response) => {
             resolve(response.data);
         }).catch((e) => {
-            console.log(JSON.stringify(e));
             reject({
                 message: e.response.data.properties.errorMessage,
                 status: e.response.data.properties.statusCode
