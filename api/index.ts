@@ -9,15 +9,15 @@ const api = axios.create({
     },
 });
 
-export const post = async <T = any>(url: string, body: any, token?: string): Promise<T> => {
+export const post = async <T = any>(url: string, body: any, token?: string, headers?: Record<string, string>): Promise<T> => {
     return new Promise<T>((resolve, reject: (error: ErrorResponse) => void) => {
         api.post(url, {
-            properties,
             "singleRequest": body
         }, {
-            headers: token ? {
-                'Authorization': `Bearer ${token}`
-            } : {}
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : undefined,
+                ...headers,
+            }
         }).then((response) => {
             resolve(response.data);
         }).catch((e) => {
