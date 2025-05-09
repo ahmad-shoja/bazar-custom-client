@@ -10,8 +10,6 @@ import OutputView from "./OutputView";
 import { dislike, like } from "@/services/like";
 import { LogLine } from "@/types";
 import { router, useFocusEffect } from "expo-router";
-import { useTheme } from "@react-navigation/native";
-import { getReviewRepository } from "@/api/repository/reviews";
 import { report } from "@/services/report";
 import { useAccounts } from "@/hooks/useAccounts";
 import { getAccounts } from "@/services/storage/accounts";
