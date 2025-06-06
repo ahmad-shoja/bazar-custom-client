@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import {
   Surface,
   Text,
@@ -63,38 +63,40 @@ const Apps = () => {
         )}
       </View>
 
-      <List.Section>
-        {apps.map((app) => (
-          <List.Item
-            key={app.id}
-            title={app.name}
-            description={app.id}
-            left={(props) => <List.Icon {...props} icon="application" />}
-            right={(props) => <List.Icon {...props} icon="delete" />}
-            onLongPress={() => {
-              setSelectedApps((prev) =>
-                prev.includes(app.id)
-                  ? prev.filter((id) => id !== app.id)
-                  : [...prev, app.id]
-              );
-            }}
-            onPress={() => {
-              router.push({
-                pathname: "/codes",
-                params: { appId: app.id },
-              });
-            }}
-            style={[
-              selectedApps.includes(app.id) && styles.selectedItem,
-              {
-                backgroundColor: selectedApps.includes(app.id)
-                  ? theme.colors.primaryContainer
-                  : undefined,
-              },
-            ]}
-          />
-        ))}
-      </List.Section>
+      <ScrollView style={styles.scrollView}>
+        <List.Section>
+          {apps.map((app) => (
+            <List.Item
+              key={app.id}
+              title={app.name}
+              description={app.id}
+              left={(props) => <List.Icon {...props} icon="application" />}
+              right={(props) => <List.Icon {...props} icon="delete" />}
+              onLongPress={() => {
+                setSelectedApps((prev) =>
+                  prev.includes(app.id)
+                    ? prev.filter((id) => id !== app.id)
+                    : [...prev, app.id]
+                );
+              }}
+              onPress={() => {
+                router.push({
+                  pathname: "/codes",
+                  params: { appId: app.id },
+                });
+              }}
+              style={[
+                selectedApps.includes(app.id) && styles.selectedItem,
+                {
+                  backgroundColor: selectedApps.includes(app.id)
+                    ? theme.colors.primaryContainer
+                    : undefined,
+                },
+              ]}
+            />
+          ))}
+        </List.Section>
+      </ScrollView>
 
       <FAB icon="plus" style={styles.fab} onPress={handleAddApp} />
 
@@ -172,6 +174,9 @@ const styles = StyleSheet.create({
   },
   selectedItem: {
     backgroundColor: "#e0e0e0",
+  },
+  scrollView: {
+    flex: 1,
   },
 });
 

@@ -16,6 +16,7 @@ import { useTheme } from "react-native-paper";
 import { useToast } from "@/contexts/ToastContext";
 import { useCodes } from "@/hooks/useCodes";
 import { useApp } from "@/hooks/useApps";
+import { ScrollView } from "react-native";
 
 const Codes = () => {
   const { appId } = useLocalSearchParams();
@@ -67,33 +68,36 @@ const Codes = () => {
           </Button>
         )}
       </View>
-
-      <List.Section>
-        {codes.map((code) => (
-          <List.Item
-            onPress={() => {
-              setSelectedCodes((prev) =>
-                prev.includes(code.id)
-                  ? prev.filter((id) => id !== code.id)
-                  : [...prev, code.id]
-              );
-            }}
-            key={code.id}
-            title={
-              <Text style={{ color: code.type === "enemy" ? "red" : "green" }}>
-                {code.code}
-              </Text>
-            }
-            left={(props) => <List.Icon {...props} icon="code-braces" />}
-            right={(props) => <List.Icon {...props} icon="delete" />}
-            style={[
-              selectedCodes.includes(code.id) && {
-                backgroundColor: theme.colors.primaryContainer,
-              },
-            ]}
-          />
-        ))}
-      </List.Section>
+      <ScrollView>
+        <List.Section>
+          {codes.map((code) => (
+            <List.Item
+              onPress={() => {
+                setSelectedCodes((prev) =>
+                  prev.includes(code.id)
+                    ? prev.filter((id) => id !== code.id)
+                    : [...prev, code.id]
+                );
+              }}
+              key={code.id}
+              title={
+                <Text
+                  style={{ color: code.type === "enemy" ? "red" : "green" }}
+                >
+                  {code.code}
+                </Text>
+              }
+              left={(props) => <List.Icon {...props} icon="code-braces" />}
+              right={(props) => <List.Icon {...props} icon="delete" />}
+              style={[
+                selectedCodes.includes(code.id) && {
+                  backgroundColor: theme.colors.primaryContainer,
+                },
+              ]}
+            />
+          ))}
+        </List.Section>
+      </ScrollView>
 
       <FAB icon="plus" style={styles.fab} onPress={handleAddCode} />
 

@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useToast } from "@/contexts/ToastContext";
 import { reqOtp, verifyOtp } from "@/api/auth";
 import { useAccounts } from "@/hooks/useAccounts";
+import { ScrollView } from "react-native";
 
 const Accounts = () => {
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
@@ -85,32 +86,33 @@ const Accounts = () => {
         )}
       </View>
 
-      <List.Section>
-        {accounts.map((account) => (
-          <List.Item
-            key={account.id}
-            title={account.phone}
-            left={(props) => <List.Icon {...props} icon="account" />}
-            right={(props) => <List.Icon {...props} icon="delete" />}
-            onPress={() => {
-              setSelectedAccounts((prev) =>
-                prev.includes(account.id)
-                  ? prev.filter((id) => id !== account.id)
-                  : [...prev, account.id]
-              );
-            }}
-            style={[
-              selectedAccounts.includes(account.id) && styles.selectedItem,
-              {
-                backgroundColor: selectedAccounts.includes(account.id)
-                  ? theme.colors.primaryContainer
-                  : undefined,
-              },
-            ]}
-          />
-        ))}
-      </List.Section>
-
+      <ScrollView>
+        <List.Section>
+          {accounts.map((account) => (
+            <List.Item
+              key={account.id}
+              title={account.phone}
+              left={(props) => <List.Icon {...props} icon="account" />}
+              right={(props) => <List.Icon {...props} icon="delete" />}
+              onPress={() => {
+                setSelectedAccounts((prev) =>
+                  prev.includes(account.id)
+                    ? prev.filter((id) => id !== account.id)
+                    : [...prev, account.id]
+                );
+              }}
+              style={[
+                selectedAccounts.includes(account.id) && styles.selectedItem,
+                {
+                  backgroundColor: selectedAccounts.includes(account.id)
+                    ? theme.colors.primaryContainer
+                    : undefined,
+                },
+              ]}
+            />
+          ))}
+        </List.Section>
+      </ScrollView>
       <FAB icon="plus" style={styles.fab} onPress={handleAddAccount} />
 
       <Portal>
