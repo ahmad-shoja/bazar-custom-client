@@ -79,6 +79,21 @@ export type ReviewResponseType = {
     };
 };
 
+export type ReviewReplyResponseType = {
+  properties: {
+    statusCode: number;
+    errorMessage: string;
+  };
+  singleReply: {
+    getReviewAndRepliesReply: {
+      mainReview: ReviewType;
+      replies: ReviewType[];
+      packageName: string;
+      nextPageCursor: string;
+    };
+  };
+};
+
 
 
 export type ReviewType = {

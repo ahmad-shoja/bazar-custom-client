@@ -1,5 +1,5 @@
 import { post } from ".";
-import { ReviewResponseType, ReviewType, MarkReviewResponse } from "./types";
+import { ReviewResponseType, ReviewType, MarkReviewResponse, ReviewReplyResponseType } from "./types";
 
 
 
@@ -11,7 +11,19 @@ export const _getReviews = async (appId: string, sortBy?: "newest" | "popular", 
             sortBy: sortBy ? (sortBy == "newest" ? 1 : 0) : 0,
         }
     })
-    return { reviews: res?.singleReply?.reviewReply?.reviews, cursor: res?.singleReply?.reviewReply.nextPageCursor };
+
+    const reviews = res?.singleReply?.reviewReply?.reviews
+    const reviewsWithReplies = []
+    for (const review of reviews) {
+        if (review.userRepliesCount > 0) {
+            const replies = await getReviewReplies(review.id)
+            reviewsWithReplies.push(review, ...replies)
+        } else {
+            reviewsWithReplies.push(review)
+        }
+    }
+    const lCursor = res?.singleReply?.reviewReply.nextPageCursor
+    return { reviews: reviewsWithReplies, cursor: lCursor ?? '' };
 }
 
 export const getReviews = async ({
@@ -92,3 +104,14 @@ export const reportReview = async (reviewId: number, token: string): Promise<voi
     });
 }
 
+export const getReviewReplies = async (reviewId: number): Promise<ReviewType[]> => {
+    return new Promise<ReviewType[]>((resolve, reject) => {
+        post<ReviewReplyResponseType>("/GetReviewAndRepliesRequest", {
+            getReviewAndRepliesRequest: { reviewId }
+        }).then((response) => {
+            resolve(response.singleReply.getReviewAndRepliesReply.replies);
+        }).catch((error) => {
+            reject(error.status);
+        });
+    });
+}
