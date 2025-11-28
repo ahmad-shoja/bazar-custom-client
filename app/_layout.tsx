@@ -80,9 +80,15 @@ function AppContent() {
           }}
         />
         <Stack.Screen
-          name="operations"
+          name="report"
           options={{
-            title: "Operations",
+            title: "Report",
+          }}
+        />
+        <Stack.Screen
+          name="resubmit"
+          options={{
+            title: "Resubmit",
           }}
         />
         <Stack.Screen

@@ -128,3 +128,41 @@ export type MarkReviewResponse = {
         }
     }
 }
+
+export type GetMyReviewsListResponseType = {
+    properties: {
+        statusCode: number;
+        errorMessage: string;
+    };
+    singleReply: {
+        getMyReviewsListReply: {
+            myReviewListItems: MyReviewItemType[];
+            nextPageCursor: string;
+        };
+    };
+};
+
+export type MyReviewItemType = {
+    packageName: string;
+    versionCode: number;
+    appName: string;
+    appIconUrl: string;
+    rate: number;
+    comment: string;
+    dateString: string;
+    likeCount: number;
+    dislikeCount: number;
+    reviewAuditState: number;
+};
+
+export type SubmitReviewResponseType = {
+    properties: {
+        statusCode: number;
+        errorMessage: string;
+    };
+    singleReply: {
+        submitReviewReply: {
+            result: boolean;
+        };
+    };
+};

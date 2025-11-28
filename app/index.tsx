@@ -15,9 +15,14 @@ const Home = () => {
         />
         <Tile icon="apps" label="Apps" onPress={() => router.push("/apps")} />
         <Tile
-          icon="refresh-circle"
-          label="Ops"
-          onPress={() => router.push("/Operations")}
+          icon="alert"
+          label="Report"
+          onPress={() => router.push("/report")}
+        />
+        <Tile
+          icon="reload-alert"
+          label="Resubmit"
+          onPress={() => router.push("/resubmit")}
         />
       </View>
       <Main />

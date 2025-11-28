@@ -1,5 +1,5 @@
 import { post } from ".";
-import { ReviewResponseType, ReviewType, MarkReviewResponse, ReviewReplyResponseType } from "./types";
+import { ReviewResponseType, ReviewType, MarkReviewResponse, ReviewReplyResponseType, GetMyReviewsListResponseType, MyReviewItemType, SubmitReviewResponseType } from "./types";
 
 
 
@@ -110,6 +110,54 @@ export const getReviewReplies = async (reviewId: number): Promise<ReviewType[]> 
             getReviewAndRepliesRequest: { reviewId }
         }).then((response) => {
             resolve(response.singleReply.getReviewAndRepliesReply.replies);
+        }).catch((error) => {
+            reject(error.status);
+        });
+    });
+}
+
+export const _getMyReviewsList = async (token: string, cursor?: string, desiredReviewStates?: string[]): Promise<{ reviews: MyReviewItemType[], cursor: string }> => {
+    const res = await post<GetMyReviewsListResponseType>("/GetMyReviewsListRequest", {
+        getMyReviewsListRequest: {
+            cursor: cursor ?? '',
+            desiredReviewStates: desiredReviewStates ?? ["NOT_REVIEWED"]
+        }
+    }, token);
+
+    const reviews = res?.singleReply?.getMyReviewsListReply?.myReviewListItems ?? [];
+    const lCursor = res?.singleReply?.getMyReviewsListReply?.nextPageCursor ?? '';
+    return { reviews, cursor: lCursor };
+}
+
+export const getMyReviewsList = async (token: string, cursor?: string, desiredReviewStates?: string[]): Promise<MyReviewItemType[]> => {
+    try {
+        const { reviews, cursor: lCursor } = await _getMyReviewsList(token, cursor, desiredReviewStates);
+        if (lCursor) {
+            return [...reviews, ...await getMyReviewsList(token, lCursor, desiredReviewStates)];
+        } else {
+            return reviews;
+        }
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+export const submitReview = async (packageName: string, rate: number, text: string, appVersionCode: number, token: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+        post<SubmitReviewResponseType>("/SubmitReviewRequest", {
+            submitReviewRequest: {
+                appVersionCode,
+                packageName,
+                rate,
+                text
+            }
+        }, token).then((response) => {
+            if (response.singleReply.submitReviewReply.result) {
+                resolve();
+            } else {
+                reject(response.properties.statusCode);
+            }
         }).catch((error) => {
             reject(error.status);
         });
