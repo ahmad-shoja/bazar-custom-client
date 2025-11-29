@@ -3,9 +3,9 @@ import { LogLine } from "@/types";
 import { executeWithTokensSync } from "./execute";
 import { likeReview } from "@/api/reviews"
 
-export const like = async (appId: string, code: string, logOutput: (log: LogLine) => void) => {
+export const like = async (appId: string, code: string, maxDep: number = 12, logOutput: (log: LogLine) => void) => {
     try {
-        const reviews = await getReviews({ appId, maxDep: 12 });
+        const reviews = await getReviews({ appId, maxDep });
         logOutput({ text: `fetched ${reviews?.length} review successfully`, color: "green" });
         const ourReviews = reviews.filter(review => review.comment.includes(code));
         if (ourReviews.length > 0)

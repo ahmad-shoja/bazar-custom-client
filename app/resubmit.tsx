@@ -3,19 +3,23 @@ import { Surface, Text, Button, TextInput } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { useAccounts } from "@/hooks/useAccounts";
 import { Account } from "@/services/storage/types";
-import Dropdown from "@/components/Dropdown";
+import MultiSelectDropdown from "@/components/MultiSelectDropdown";
 import { updateReportedReviews } from "@/services/updateReportedReviews";
 import OutputView from "@/components/OutputView";
 import { LogLine } from "@/types";
 
 const Resubmit = () => {
   const { accounts } = useAccounts();
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>([]);
   const [interval, setInterval] = useState<string>("300");
   const [isRunning, setIsRunning] = useState(false);
   const [nextAction, setNextAction] = useState<number>(0);
   const [outputLines, setOutputLines] = useState<LogLine[]>([]);
   const log = (line: LogLine) => setOutputLines((p) => [...p, line]);
+
+  const selectedAccounts = accounts.filter((account) =>
+    selectedAccountIds.includes(account.id)
+  );
 
   useEffect(() => {
     let timer: number;
@@ -23,13 +27,21 @@ const Resubmit = () => {
       timer = window.setInterval(() => {
         setNextAction((prev) => prev - 1);
       }, 1000);
-    } else if (nextAction === 0 && isRunning && selectedAccount) {
-      updateReportedReviews(selectedAccount.token, log).then(() => {
-        setNextAction(parseInt(interval) || 300);
-      });
+    } else if (nextAction === 0 && isRunning && selectedAccounts.length > 0) {
+      const processNextAccount = async (index: number) => {
+        if (index >= selectedAccounts.length) {
+          setNextAction(parseInt(interval) || 300);
+          return;
+        }
+        const account = selectedAccounts[index];
+        log({ text: `Processing account: ${account.phone}`, color: "yellow" });
+        await updateReportedReviews(account.token, log);
+        await processNextAccount(index + 1);
+      };
+      processNextAccount(0);
     }
     return () => clearInterval(timer);
-  }, [isRunning, nextAction, interval, selectedAccount]);
+  }, [isRunning, nextAction, interval, selectedAccountIds]);
 
   const handleStartResubmit = () => {
     setIsRunning(true);
@@ -52,21 +64,14 @@ const Resubmit = () => {
         </Text>
 
         <View style={styles.accountSection}>
-          <Dropdown
-            label="Account"
-            value={selectedAccount?.id || ""}
-            options={[
-              { label: "Select an Account", value: "" },
-              ...accounts.map((account: Account) => ({
-                label: account.phone,
-                value: account.id,
-              })),
-            ]}
-            onSelect={(value) => {
-              setSelectedAccount(
-                accounts.find((account) => account.id === value) || null
-              );
-            }}
+          <MultiSelectDropdown
+            label="Select Accounts"
+            values={selectedAccountIds}
+            options={accounts.map((account: Account) => ({
+              label: account.phone,
+              value: account.id,
+            }))}
+            onSelect={setSelectedAccountIds}
           />
         </View>
 
@@ -84,7 +89,7 @@ const Resubmit = () => {
           <Button
             mode="contained"
             onPress={handleStartResubmit}
-            disabled={isRunning || !selectedAccount}
+            disabled={isRunning || selectedAccountIds.length === 0}
           >
             Start Resubmit
           </Button>

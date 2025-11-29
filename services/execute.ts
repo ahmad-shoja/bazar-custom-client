@@ -1,9 +1,11 @@
 import { LogLine } from "@/types";
 import { getAccounts, updateAccount } from "./storage/accounts"
 import { getAccessToken } from "@/api/auth";
-export const executeWithTokensSync = async (action: (token: string) => Promise<void>, logOutput?: (log: LogLine) => void):
+import { Account } from "./storage/types";
+export const executeWithTokensSync = async (action: (token: string) => Promise<void>,
+    logOutput?: (log: LogLine) => void, pAccounts?: Account[]):
     Promise<void> => new Promise<void>(async (resolve, reject) => {
-        let accounts = await getAccounts()
+        let accounts = pAccounts ?? await getAccounts()
         for (const { token, phone, ...rest } of accounts) {
             logOutput?.({ text: `Executing with account: ${phone}` });
             await action(token).then(() => {
@@ -26,21 +28,3 @@ export const executeWithTokensSync = async (action: (token: string) => Promise<v
             });
         }
     })
-
-
-// export const executeWithTokensAsync = async (action: (token: string) => Promise<void>, logOutput?: (log: LogLine) => void):
-//     Promise<void> => new Promise<void>((resolve, reject) => {
-//         getAccounts().then(async (accounts) => {
-//             await Promise.all(accounts.map(({ token, phone, ...rest }) => {
-//                 logOutput?.({ text: `Executing with account: ${phone}` });
-//                 action(token).then(resolve).catch((e) => {
-//                     if (e == 401) {
-//                         getAccessToken(rest.refreshToken).then(({ token: newToken }) => {
-//                             updateAccount({ ...rest, token: newToken, phone });
-//                             action(newToken).then(resolve).catch(reject)
-//                         })
-//                     } else reject(e)
-//                 });
-//             }));
-//         })
-//     })

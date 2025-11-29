@@ -3,6 +3,7 @@ import { MyReviewItemType } from "@/api/types";
 import { LogLine } from "@/types";
 import { getTrackedReviews, saveTrackedReviews } from "./storage/reportedReviews";
 import { TrackedReview } from "./storage/types";
+import { like } from "./like";
 
 const REVIEW_STATES = ["PUBLISHED", "NOT_REVIEWED", "REJECTED"];
 
@@ -78,6 +79,7 @@ export const updateReportedReviews = async (
                     text: `Review ${tracked.packageName} published successfully. Removing from tracking.`,
                     color: "green",
                 });
+                like(matched.packageName, matched.comment ?? "", 1, logOutput);
                 continue;
             }
 
